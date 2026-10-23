@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "_comment": "模块注册表。加模块只改这里。契约见 docs/module-contract.md。",
+  "modules": {}
+}
