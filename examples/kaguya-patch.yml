@@ -1,0 +1,76 @@
+# ============================================================================
+#  kaguya profile 的 patch 层 —— 配置样例（脱敏版）
+# ============================================================================
+#
+#  这是 `<DSH_HOME>/profiles/kaguya/cordis.patch.yml` 的可公开版本。
+#  实际部署时：把占位符换成你自己的值，放到那个路径下。
+#
+#  ⚠️ 真实的 accessToken 不要提交进仓库。
+# ============================================================================
+
+# ── QQ 通道（dsh-onebot-qq）────────────────────────────────────────────────
+- id: dsh-onebot
+  config:
+    # 连接方式：NapCat 拨入（reverse）
+    mode: reverse
+    host: 127.0.0.1
+    port: 8643
+
+    # OneBot token —— 必须与 NapCat 侧填的一致
+    # ⚠️ 换成你自己的随机串，别用样例值
+    accessToken: 'REPLACE_WITH_YOUR_RANDOM_TOKEN'
+
+    # 留空 = 从 NapCat 的 meta 事件自动学习机器人 QQ 号
+    botQQ: ''
+
+    # 群聊必须 @ 才触发（强烈建议保持 true）
+    requireMention: true
+    groupPolicy: open
+    dmPolicy: open
+
+    # 所有 QQ 会话的工作目录
+    workspacePath: 'D:/Bot_KaGuYa'
+
+    # 挂载的人格 preset（声明在下方 PERSONA PRESET 区块）
+    agentPreset: kaguya
+
+    # 只发最终回复，不发工具调用之间的碎嘴
+    interimMessages: false
+    # 出错不往群里甩技术提示（交给人格卡兜）
+    sendErrorNotice: false
+    # 正文超过该长度渲染成文字图卡片
+    textImageThreshold: 150
+
+    logLevel: info
+    traceEnabled: false
+    injectEnabled: false
+    injectDryRun: true
+
+# ── 人格蒸馏插件（可选）────────────────────────────────────────────────────
+# 目标：守护 D:\Bot_KaGuYa\persona\kaguya.md
+# 详见 docs 或 dsh-persona-distill 原始项目
+# - insert:
+#     - id: persona-distill
+#       name: 'D:/Bot_KaGuYa/runtime/dsh-persona-distill/index.js'
+#       config:
+#         enabled: true
+#         runAt: '04:10'
+
+# ── 人格 preset ────────────────────────────────────────────────────────────
+# 这一块由 `node tools/sync-persona.mjs` 从 persona/kaguya.md 自动生成，
+# 不要手改。运行那个脚本会自动重写下面这个区块。
+#
+# - insert:
+#     - id: preset-kaguya
+#       name: '@deepseek-ai/dsh-agent-preset'
+#       config:
+#         id: kaguya
+#         order: 40
+#         plugins:
+#           - id: persona
+#             name: '@deepseek-ai/dsh-persona'
+#             config:
+#               complete: true
+#               includeRuntimeContext: false
+#               prefix: |
+#                 （人格卡全文由脚本注入这里）
